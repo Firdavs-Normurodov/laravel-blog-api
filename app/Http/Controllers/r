@@ -66,43 +66,38 @@ class PostController extends Controller
 
     public function update(Request $request, $id)
     {
-        // Postni ID orqali qidiramiz
         $post = Post::find($id);
 
-        // Post mavjudligini tekshiramiz
         if (!$post) {
             return response()->json(['message' => 'Post not found'], 404);
         }
 
-        // Faqat o'z postini yangilash uchun tekshirish
+        // Foydalanuvchini tekshirish
         if ($post->user_id !== auth()->id()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        // Validatsiya
         $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string',
             'img' => 'nullable|image|max:10240'
         ]);
 
-        // Rasmni yangilash
+        // Rasm yuklashni tekshirish
         if ($request->hasFile('img')) {
-            // Yangi rasmni yuklaymiz
             $image = $request->file('img');
             $imageName = Str::random(40) . '.' . $image->getClientOriginalExtension();
             $imagePath = $image->storeAs('imgposts', $imageName, 'public');
-            $post->img = $imagePath; // Yangi rasm manzilini saqlaymiz
+            $post->img = $imagePath;
         }
 
-        // Yangilanishlarni saqlaymiz
+        // Ma'lumotlarni yangilash
         $post->title = $request->title;
         $post->body = $request->body;
         $post->save();
 
         return response()->json($post, 200);
     }
-
 
 
     public function destroy($id)

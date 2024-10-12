@@ -36,11 +36,13 @@ Route::post('login', [UserController::class, 'login'])->name('login'); // Login 
 // Foydalanuvchini tizimdan chiqarish uchun yo'l
 Route::post('logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
 
-// Postlar uchun marshrutlar
+/// Postlar uchun marshrutlar
 Route::get('/posts', [PostController::class, 'index']); // Barcha postlarni olish
 Route::get('/posts/{id}', [PostController::class, 'show']); // Berilgan ID ga mos postni olish
-// Route::get('/user/posts', [PostController::class, 'userPosts'])->middleware('auth:sanctum'); // Foydalanuvchining postlarini olish
+Route::get('/user/posts', [PostController::class, 'userPosts'])->middleware('auth:sanctum'); // Foydalanuvchining postlarini olish
 Route::post('/posts', [PostController::class, 'store'])->middleware('auth:sanctum'); // Yangi post yaratish
-Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('auth:sanctum'); // Postni yangilash
+Route::put('/posts/{id}', [PostController::class, 'update'])->middleware('auth:sanctum'); // Postni yangilash (butun yangilanish)
+Route::patch('/posts/{id}', [PostController::class, 'update'])->middleware('auth:sanctum'); // Postni yangilash (qisman yangilanish)
 Route::delete('/posts/{id}', [PostController::class, 'destroy'])->middleware('auth:sanctum'); // Postni o'chirish
+
 // ============
